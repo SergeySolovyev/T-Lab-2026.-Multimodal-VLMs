@@ -1,0 +1,24 @@
+project:
+  seed: 42
+  device: cuda
+  output_dir: artifacts
+  external_nanovlm_repo: external/nanoVLM
+
+env:
+  id: MiniGrid-Empty-8x8-v0
+  max_steps: 100
+  render_size: 112
+  n_eval_episodes: 200
+
+model:
+  source: lusxvr/nanoVLM-450M
+  max_new_tokens: 80
+  temperature: 0.0
+  direct_action_vocab:
+    - left
+    - right
+    - forward
+
+logging:
+  print_every: 50
+  save_every: 1

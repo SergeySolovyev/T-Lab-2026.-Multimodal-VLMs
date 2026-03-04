@@ -1,0 +1,24 @@
+defaults:
+  - base
+
+grpo:
+  init_checkpoint: artifacts/sft/checkpoint_last.pt
+  mode: text_action
+  total_updates: 2000
+  rollout_episodes_per_update: 8
+  group_size: 8
+  lr: 5e-6
+  clip_eps: 0.2
+  kl_beta: 0.02
+  max_gen_tokens: 96
+  reward:
+    success_bonus: 1.0
+    step_penalty: 0.01
+    valid_action_tag_bonus: 0.05
+    verbosity_penalty: 0.002
+
+text_action_format:
+  template: |
+    1) Briefly describe what you see and orientation.
+    2) Describe immediate plan to reach goal in 1 sentence.
+    3) Output final line exactly as: ACTION: <left|right|forward>

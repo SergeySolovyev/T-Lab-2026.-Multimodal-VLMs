@@ -1,0 +1,21 @@
+defaults:
+  - base
+
+dataset:
+  train_episodes: 20000
+  val_episodes: 2000
+  test_episodes: 2000
+  random_start_prob: 0.7
+  map_sizes: [5, 6, 8, 16]
+  curriculum: true
+
+sft:
+  batch_size: 8
+  num_epochs: 5
+  lr: 1e-5
+  weight_decay: 0.01
+  grad_clip: 1.0
+  output_format: direct_action
+  improvements:
+    - curriculum_by_size
+    - prompt_template_v2
