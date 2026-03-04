@@ -1,0 +1,1 @@
+https://minigrid.farama.org/environments/minigrid/EmptyEnv/

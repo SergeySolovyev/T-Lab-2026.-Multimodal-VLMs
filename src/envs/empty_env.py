@@ -24,14 +24,30 @@ class EnvStep:
 
 
 def make_empty_env(size: int = 8, random_start: bool = True, max_steps: int | None = None, seed: int | None = None):
-    env_id = f"MiniGrid-Empty-{'Random-' if random_start else ''}{size}x{size}-v0"
+    """Create MiniGrid EmptyEnv, trying several env-id variants for compatibility."""
     kwargs = {}
     if max_steps is not None:
         kwargs["max_steps"] = max_steps
-    env = gym.make(env_id, render_mode="rgb_array", **kwargs)
-    if seed is not None:
-        env.reset(seed=seed)
-    return env
+
+    candidates = [f"MiniGrid-Empty-{'Random-' if random_start else ''}{size}x{size}-v0"]
+    for s in [6, 8, 16, 5]:
+        candidates.append(f"MiniGrid-Empty-{'Random-' if random_start else ''}{s}x{s}-v0")
+        candidates.append(f"MiniGrid-Empty-{s}x{s}-v0")
+
+    seen = set()
+    for env_id in candidates:
+        if env_id in seen:
+            continue
+        seen.add(env_id)
+        try:
+            env = gym.make(env_id, render_mode="rgb_array", **kwargs)
+            if seed is not None:
+                env.reset(seed=seed)
+            return env
+        except Exception:
+            continue
+
+    raise RuntimeError(f"No compatible MiniGrid Empty env found. Tried: {sorted(seen)}")
 
 
 def get_goal_pos(env) -> Tuple[int, int]:
@@ -78,4 +94,15 @@ def expert_next_action(env) -> int:
 
 
 def get_frame(env) -> np.ndarray:
-    return env.get_frame(highlight=False, tile_size=16)
+    if hasattr(env, "get_frame"):
+        return env.get_frame(highlight=False, tile_size=16)
+
+    unwrapped = env.unwrapped
+    if hasattr(unwrapped, "get_frame"):
+        return unwrapped.get_frame(highlight=False, tile_size=16)
+
+    frame = env.render()
+    if frame is not None:
+        return frame
+
+    raise RuntimeError("Unable to get frame from environment")

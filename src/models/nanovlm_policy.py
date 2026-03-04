@@ -29,6 +29,12 @@ class NanoVLMPolicy:
         self.model.to(self.device)
         self.model.train()
 
+        # Fix: ensure max_img_size is divisible by vit_img_size
+        # (nanoVLM DynamicResize bug when max_img_size % vit_img_size != 0)
+        patch = self.model.cfg.vit_img_size
+        if self.model.cfg.max_img_size % patch != 0:
+            self.model.cfg.max_img_size = (self.model.cfg.max_img_size // patch) * patch
+
         self.tokenizer = get_tokenizer(
             self.model.cfg.lm_tokenizer,
             self.model.cfg.vlm_extra_tokens,
