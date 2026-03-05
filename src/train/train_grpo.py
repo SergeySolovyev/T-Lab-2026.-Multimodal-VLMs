@@ -112,6 +112,12 @@ def main() -> None:
     optimizer = torch.optim.AdamW(policy.model.parameters(), lr=args.lr)
     history = []
 
+    print(
+        f"Starting GRPO mode={args.mode}, updates={args.updates}, "
+        f"episodes_per_update={args.episodes_per_update}, group_size={args.group_size}",
+        flush=True,
+    )
+
     for update in tqdm(range(args.updates), desc=f"grpo-{args.mode}"):
         grouped = []
         for episode_block in range(args.episodes_per_update):
@@ -124,8 +130,18 @@ def main() -> None:
 
         train_loss = grpo_update(policy, ref_policy, grouped, optimizer, kl_beta=args.kl_beta)
 
+        print(
+            f"update {update + 1}/{args.updates} done, train_loss={train_loss:.6f}",
+            flush=True,
+        )
+
         if (update + 1) % 10 == 0:
             eval_metrics = evaluate_policy(policy=policy, mode=args.mode, episodes=args.eval_episodes)
+            print(
+                f"eval@{update + 1}: success_rate={eval_metrics.get('success_rate', float('nan')):.4f}, "
+                f"avg_return={eval_metrics.get('avg_return', float('nan')):.4f}",
+                flush=True,
+            )
             row = {
                 "update": update + 1,
                 "train_loss": train_loss,
