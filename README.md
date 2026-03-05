@@ -1,60 +1,60 @@
-# NanoVLM in MiniGrid EmptyEnv: SFT vs GRPO
+﻿# NanoVLM in MiniGrid EmptyEnv: SFT vs GRPO
 
-инимальный академический репозиторий для задания по сравнению трёх режимов дообучения:
+This repository contains a compact, reproducible implementation for the assignment:
 
-1. SFT (supervised fine-tuning) на экспертных траекториях,
-2. GRPO с прямым выводом действия (`action`),
-3. GRPO в формате `text + action`.
+1. SFT (supervised fine-tuning) on expert trajectories,
+2. GRPO with direct action output (`action`),
+3. GRPO with text + action output (`text_action`).
 
-## ель проекта
+## Project Goal
 
-даптировать vision-and-language модель NanoVLM для управления агентом в среде MiniGrid EmptyEnv и провести сопоставимый эксперимент по качеству и sample efficiency для трёх режимов обучения.
+Adapt a vision-language model (NanoVLM) for control in MiniGrid EmptyEnv and compare training regimes by final quality and sample efficiency.
 
-## тчёты (Part 1 / Part 2)
+## Reports (Part 1 / Part 2)
 
-- `NanoVLM MiniGrid Technical Report.pdf` — **Part 1** (постановка, данные, методика).
-- `NanoVLM MiniGrid Technical Report_Results.pdf` — **Part 2** (результаты и обсуждение).
+- `NanoVLM MiniGrid Technical Report.pdf` — **Part 1** (problem statement, data, methodology).
+- `NanoVLM MiniGrid Technical Report_Results.pdf` — **Part 2** (results, comparison, discussion).
 
-убличная ссылка на Part 2 (должна открываться именно из корня репозитория в ветке `main`):
+Public Part 2 link (must resolve from repository root on `main`):
 
 - https://github.com/SergeySolovyev/T-Lab-2026.-Multimodal-VLMs/blob/main/NanoVLM%20MiniGrid%20Technical%20Report_Results.pdf
 
-## Соответствие требованиям задания
+## Mapping to Assignment Requirements
 
-### 1) SFT-бэйзлайн
-- енерация экспертного датасета: `src/data/generate_expert_dataset.py`
-- ормат обучающих таргетов: `src/data/prompt_formats.py`
-- бучение SFT-политики: `src/train/train_sft.py`
+### 1) SFT baseline
+- Expert dataset generation: `src/data/generate_expert_dataset.py`
+- Prompt/target formats: `src/data/prompt_formats.py`
+- SFT training: `src/train/train_sft.py`
 
-### 2) GRPO: прямой вывод действия
-- RL-дообучение в режиме `action`: `src/train/train_grpo.py`
+### 2) GRPO: direct action output
+- RL fine-tuning (`action`): `src/train/train_grpo.py`
 
-### 3) GRPO: текст + действие
-- RL-дообучение в режиме `text_action`: `src/train/train_grpo.py`
+### 3) GRPO: text + action output
+- RL fine-tuning (`text_action`): `src/train/train_grpo.py`
 
-### 4) тоговое сравнение
-- Скрипт сравнения запусков: `src/eval/compare_runs.py`
-- Скрипт оценки: `src/eval/evaluate.py`
+### 4) Final comparison
+- Run comparison: `src/eval/compare_runs.py`
+- Evaluation utilities: `src/eval/evaluate.py`
 
-## Структура репозитория
+## Repository Structure
 
-- `src/` — основная реализация (данные, среда, модель, обучение, оценка)
-- `configs/` — конфигурации SFT/GRPO
-- `scripts/` — вспомогательные скрипты запуска
-- `colab_launcher.ipynb` — основной воспроизводимый пайплайн для Colab
-- `artifacts/` — директории для результатов
+- `src/` — core implementation (data, env, model, training, eval)
+- `configs/` — SFT/GRPO configuration files
+- `scripts/` — helper scripts for setup and runs
+- `colab_launcher.ipynb` — main Colab pipeline
+- `artifacts/` — output directories for generated results
 
-## оспроизводимость: рекомендованный запуск (Colab)
+## Reproducibility (Recommended: Colab)
 
-ткройте `colab_launcher.ipynb` и выполните ячейки последовательно сверху вниз.
+Open `colab_launcher.ipynb` and run cells top-to-bottom.
 
-оутбук покрывает:
-- подготовку окружения и зависимостей,
-- подключение/подготовку NanoVLM,
-- поэтапный запуск `SFT → GRPO-action → GRPO-text_action → compare`,
-- механизм восстановления после прерывания сессии.
+Pipeline stages in notebook:
+- environment and dependency setup,
+- NanoVLM preparation,
+- `SFT -> GRPO-action -> GRPO-text_action -> compare`,
+- resume flow after runtime interruption.
 
-## окальный запуск (Windows, PowerShell)
+## Local Run (Windows PowerShell)
 
 ```powershell
 python -m venv .venv
@@ -64,8 +64,8 @@ powershell -ExecutionPolicy Bypass -File scripts/setup_nanovlm.ps1
 powershell -ExecutionPolicy Bypass -File scripts/run_local_pipeline.ps1
 ```
 
-## Ссылки на материалы задания
+## Reference Links
 
 - MiniGrid EmptyEnv: https://minigrid.farama.org/environments/minigrid/EmptyEnv/
 - NanoVLM: https://github.com/huggingface/nanoVLM
-- GRPO: https://arxiv.org/abs/2402.03300
+- GRPO paper: https://arxiv.org/abs/2402.03300
