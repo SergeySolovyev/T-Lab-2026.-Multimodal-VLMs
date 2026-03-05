@@ -1,19 +1,26 @@
+# Python
 __pycache__/
-*.py[cod]
+*.pyc
 *.pyo
 *.pyd
-*.egg-info/
 .venv/
-venv/
-.env
-.env.*
+
+# Jupyter
 .ipynb_checkpoints/
-artifacts/
-external/
-wandb/
-*.log
-*.safetensors
-*.pt
-*.pth
-*.ckpt
+
+# OS / editor
 .DS_Store
+Thumbs.db
+.vscode/
+
+# Large training artifacts (keep only lightweight metrics in repo)
+artifacts/**/checkpoint*
+artifacts/**/*.pt
+artifacts/**/*.bin
+artifacts/**/*.npz
+artifacts/**/events.out.tfevents*
+
+# Optional runtime folders
+external/nanoVLM/
+
+github_submission_minimal/
